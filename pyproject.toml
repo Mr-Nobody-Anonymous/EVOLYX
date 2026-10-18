@@ -29,15 +29,32 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.5.0",
 ]
-ml = [
+training = [
     "torch>=2.1.0",
     "transformers>=4.40.0",
     "peft>=0.10.0",
     "trl>=0.8.0",
     "accelerate>=0.29.0",
 ]
+inference = [
+    "vllm>=0.4.0; sys_platform == 'linux'",
+    "llama-cpp-python>=0.2.70",
+]
+memory = [
+    "chromadb>=0.4.0",
+]
+retrieval = [
+    "llama-index-core>=0.10.0",
+]
+agents = [
+    "langgraph>=0.0.30",
+    "dspy-ai>=2.4.0",
+]
+ml = [
+    "evolyx[training]",
+]
 all = [
-    "evolyx[api,dev,ml]"
+    "evolyx[api,dev,training,inference,memory,retrieval,agents]",
 ]
 
 [project.scripts]

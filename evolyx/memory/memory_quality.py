@@ -16,13 +16,25 @@ class MemoryQualityFilter:
         self.require_verification = require_verification
 
     def sanitize_text(self, text: str) -> str:
-        """Strips API keys, emails, and sensitive patterns."""
+        """Strips API keys, private keys, credentials, emails, and sensitive PII."""
+        # Scrub PEM private keys
+        text = re.sub(r"-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----", "[PRIVATE_KEY_REDACTED]", text)
+        # Scrub AWS access keys (e.g. AKIA...)
+        text = re.sub(r"\bAKIA[0-9A-Z]{16}\b", "[AWS_KEY_REDACTED]", text)
+        # Scrub JWT tokens (3 base64url segments separated by dots)
+        text = re.sub(r"\beyJ[a-zA-Z0-9_-]{10,}\.eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\b", "[JWT_REDACTED]", text)
+        # Scrub API keys / tokens (sk-..., sk-ant-..., ghp_..., generic 32-64 hex/b64 keys)
+        text = re.sub(r"\b(?:sk-(?:ant-)?[a-zA-Z0-9_-]{20,}|ghp_[a-zA-Z0-9]{20,}|gho_[a-zA-Z0-9]{20,}|glpat-[a-zA-Z0-9_-]{20,}|[a-f0-9]{32,64})\b", "[SECRET_REDACTED]", text)
         # Scrub email addresses
         text = re.sub(r"[\w\.-]+@[\w\.-]+\.\w+", "[EMAIL_REDACTED]", text)
-        # Scrub API keys / tokens (generic hex or base64 keys > 24 chars)
-        text = re.sub(r"\b(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{20,}|[a-f0-9]{32,64})\b", "[SECRET_REDACTED]", text)
+        # Scrub Social Security Numbers (SSN: XXX-XX-XXXX)
+        text = re.sub(r"\b\d{3}-\d{2}-\d{4}\b", "[SSN_REDACTED]", text)
+        # Scrub Credit Card numbers (16 digits in 4 groups)
+        text = re.sub(r"\b(?:\d{4}[ -]?){3}\d{4}\b", "[CREDIT_CARD_REDACTED]", text)
         # Scrub IPv4 addresses
-        text = re.sub(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", "[IP_REDACTED]", text)
+        text = re.sub(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", "[IP_REDACTED]", text)
+        # Scrub phone numbers (US / standard format)
+        text = re.sub(r"\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b", "[PHONE_REDACTED]", text)
         return text
 
     def validate(self, record: MemoryRecord) -> Tuple[bool, str]:

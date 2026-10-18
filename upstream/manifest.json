@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-10-18T10:40:00Z",
+  "total_repositories": 18,
+  "description": "Cryptographically pinned inventory of upstream open-source frameworks, commit hashes, licenses, and EVOLYX adapter boundaries.",
+  "repositories": {
+    "trl": {
+      "name": "TRL (Transformer Reinforcement Learning)",
+      "category": "training",
+      "role": "Post-training, Supervised Fine-Tuning (SFT), DPO, GRPO, and PPO reinforcement learning",
+      "remote_url": "https://github.com/huggingface/trl.git",
+      "pinned_commit": "6d6901c5e3963108076131ac4979d344566b13a2",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.interfaces.backend_registry",
+      "integration_status": "adapter_ready",
+      "extra_group": "training"
+    },
+    "unsloth": {
+      "name": "Unsloth",
+      "category": "training",
+      "role": "Ultra-fast memory-efficient LoRA and QLoRA fine-tuning for consumer and datacenter GPUs",
+      "remote_url": "https://github.com/unslothai/unsloth.git",
+      "pinned_commit": "b4a4855e49c674f1dd375a5f716d901502b97b73",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.interfaces.backend_registry",
+      "integration_status": "adapter_ready",
+      "extra_group": "training"
+    },
+    "OpenRLHF": {
+      "name": "OpenRLHF",
+      "category": "training",
+      "role": "Distributed reinforcement learning with human feedback and multi-turn agent policy optimization",
+      "remote_url": "https://github.com/OpenRLHF/OpenRLHF.git",
+      "pinned_commit": "dc2a7ad326f619fc5a47737ea47d1920ce2c0b53",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.interfaces.backend_registry",
+      "integration_status": "adapter_ready",
+      "extra_group": "training"
+    },
+    "axolotl": {
+      "name": "Axolotl",
+      "category": "training",
+      "role": "Declarative multi-model fine-tuning pipelines and reproducible training configurations",
+      "remote_url": "https://github.com/axolotl-ai-cloud/axolotl.git",
+      "pinned_commit": "edfa93277dfb8f30973b7c003174a1b0a9fdfe1b",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.interfaces.backend_registry",
+      "integration_status": "adapter_ready",
+      "extra_group": "training"
+    },
+    "peft": {
+      "name": "PEFT (Parameter-Efficient Fine-Tuning)",
+      "category": "training",
+      "role": "Low-Rank Adaptation (LoRA), prefix tuning, and parameter-efficient adapter management",
+      "remote_url": "https://github.com/huggingface/peft.git",
+      "pinned_commit": "c2d5f697fbb30063cbde6f39e2734883b70b8753",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.interfaces.backend_registry",
+      "integration_status": "installed",
+      "extra_group": "training"
+    },
+    "transformers": {
+      "name": "Hugging Face Transformers",
+      "category": "core",
+      "role": "Core model architectures, tokenizers, causal LM heads, and tensor serialization",
+      "remote_url": "https://github.com/huggingface/transformers.git",
+      "pinned_commit": "d4804f9d76b8c071b993d813e9e87067b780cbee",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.core.interfaces",
+      "integration_status": "installed",
+      "extra_group": "core"
+    },
+    "vllm": {
+      "name": "vLLM",
+      "category": "inference",
+      "role": "High-throughput, low-latency LLM serving engine with PagedAttention and continuous batching",
+      "remote_url": "https://github.com/vllm-project/vllm.git",
+      "pinned_commit": "da9134bc89364465f68aa679564435936d157a14",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.interfaces.backend_registry",
+      "integration_status": "adapter_ready",
+      "extra_group": "inference"
+    },
+    "llama.cpp": {
+      "name": "llama.cpp",
+      "category": "inference",
+      "role": "Hardware-agnostic quantized local inference (GGUF) running across Apple Silicon, CPU, and CUDA",
+      "remote_url": "https://github.com/ggml-org/llama.cpp.git",
+      "pinned_commit": "547208dca250ceb3e4c8615598d043f2b602a527",
+      "license": "MIT",
+      "adapter_module": "evolyx.interfaces.backend_registry",
+      "integration_status": "adapter_ready",
+      "extra_group": "inference"
+    },
+    "letta": {
+      "name": "Letta (formerly MemGPT)",
+      "category": "memory",
+      "role": "Stateful long-term memory management, working memory paging, and recursive recall",
+      "remote_url": "https://github.com/letta-ai/letta.git",
+      "pinned_commit": "5bcdd177d70fa2b31a754cfcd801e77b2e1ab16a",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.memory.long_term",
+      "integration_status": "implemented",
+      "extra_group": "memory"
+    },
+    "mem0": {
+      "name": "Mem0",
+      "category": "memory",
+      "role": "Adaptive personalized memory layer with semantic clustering and entity relationship graphs",
+      "remote_url": "https://github.com/mem0ai/mem0.git",
+      "pinned_commit": "0724291bd864cf807e88ee8981c8226644e8fb42",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.memory.knowledge_store",
+      "integration_status": "implemented",
+      "extra_group": "memory"
+    },
+    "llama_index": {
+      "name": "LlamaIndex",
+      "category": "retrieval",
+      "role": "Document indexing, chunking, vector store connectors, and retrieval-augmented generation",
+      "remote_url": "https://github.com/run-llama/llama_index.git",
+      "pinned_commit": "619d74664e8404612038bc15a1a40c686037277c",
+      "license": "MIT",
+      "adapter_module": "evolyx.memory.retrieval",
+      "integration_status": "implemented",
+      "extra_group": "retrieval"
+    },
+    "dspy": {
+      "name": "DSPy",
+      "category": "evolution",
+      "role": "Programmatic prompt optimization, automated teleprompters, and pipeline compilation",
+      "remote_url": "https://github.com/stanfordnlp/dspy.git",
+      "pinned_commit": "c7e9752debcce5715fee62cd5f1ae538c14d5ce4",
+      "license": "MIT",
+      "adapter_module": "evolyx.evolution.engine",
+      "integration_status": "implemented",
+      "extra_group": "evolution"
+    },
+    "langgraph": {
+      "name": "LangGraph",
+      "category": "orchestration",
+      "role": "Cyclic state graph workflows, multi-agent coordination, and human-in-the-loop checkpoints",
+      "remote_url": "https://github.com/langchain-ai/langgraph.git",
+      "pinned_commit": "0870f5efcec9d486046ae8abce0735aa7d1f3b79",
+      "license": "MIT",
+      "adapter_module": "evolyx.runtime.orchestrator",
+      "integration_status": "implemented",
+      "extra_group": "agents"
+    },
+    "OpenHands": {
+      "name": "OpenHands",
+      "category": "agents",
+      "role": "Autonomous software engineering agent, terminal execution loop, and workspace sandboxing",
+      "remote_url": "https://github.com/All-Hands-AI/OpenHands.git",
+      "pinned_commit": "852132d38dbc15e03d6825bbacbeb971c72575be",
+      "license": "MIT",
+      "adapter_module": "evolyx.evolution.code_proposals",
+      "integration_status": "implemented",
+      "extra_group": "agents"
+    },
+    "OLMo": {
+      "name": "OLMo",
+      "category": "foundation",
+      "role": "Fully open language model architecture, pre-training framework, and open weights",
+      "remote_url": "https://github.com/allenai/OLMo.git",
+      "pinned_commit": "090253dac6688f2532509daa7aa2eb5fae50e956",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.evolution.model_growth",
+      "integration_status": "reference",
+      "extra_group": "foundation"
+    },
+    "OLMo-core": {
+      "name": "OLMo-core",
+      "category": "foundation",
+      "role": "Modular pre-training and scaling primitives for high-performance open weight models",
+      "remote_url": "https://github.com/allenai/OLMo-core.git",
+      "pinned_commit": "5f6f58a133e7ef577d596295f2c8db4651c27857",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.evolution.model_growth",
+      "integration_status": "reference",
+      "extra_group": "foundation"
+    },
+    "Qwen": {
+      "name": "Qwen",
+      "category": "foundation",
+      "role": "Alibaba open-weight base models, tokenizer definitions, and alignment baselines",
+      "remote_url": "https://github.com/QwenLM/Qwen.git",
+      "pinned_commit": "2df8e8ac450fa185c421a08b0090ef81826caa6e",
+      "license": "Tongyi Qianwen License / Apache-2.0",
+      "adapter_module": "evolyx.core.model_registry",
+      "integration_status": "reference",
+      "extra_group": "foundation"
+    },
+    "Qwen2.5": {
+      "name": "Qwen2.5",
+      "category": "foundation",
+      "role": "State-of-the-art open-weight foundation models (0.5B to 72B) optimized for reasoning and coding",
+      "remote_url": "https://github.com/QwenLM/Qwen2.5.git",
+      "pinned_commit": "7a2f61ffc7a20d47efcd2bf97f6f2bf52729042e",
+      "license": "Apache-2.0",
+      "adapter_module": "evolyx.core.model_registry",
+      "integration_status": "reference",
+      "extra_group": "foundation"
+    }
+  }
+}

@@ -6,9 +6,10 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-16%20Passed%20(100%25)-success?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
-[![Architecture](https://img.shields.io/badge/architecture-Recursive%20Evolution-8A2BE2?style=for-the-badge)](#the-4-operational-layers)
-[![Safety Gate](https://img.shields.io/badge/regression%20gate-Strict%20Zero--Degradation-00C49F?style=for-the-badge)](#-the-5-stage-continuous-improvement-loop)
+[![Tests](https://img.shields.io/badge/tests-29%20Passed%20(100%25)-success?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![CI](https://img.shields.io/badge/CI-Automated%20Matrix-blue?style=for-the-badge&logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
+[![Upstream](https://img.shields.io/badge/upstream%20manifest-18%20Pinned%20Repos-8A2BE2?style=for-the-badge)](upstream/manifest.json)
+[![Integrations](https://img.shields.io/badge/status%20matrix-18%20Adapters-00C49F?style=for-the-badge)](docs/INTEGRATIONS.md)
 
 <p align="center">
   <b>The Unified Open-Source Platform for Autonomous, Continuously Self-Improving Artificial Intelligence.</b>
@@ -258,17 +259,20 @@ python install.py --profile auto
 
 ---
 
-### 🧪 Immediate Verification & Self-Test
-Run the built-in 16-test battery to verify complete platform readiness:
+### 🧪 Immediate Verification & Comprehensive Self-Test
+Run the built-in 29-test battery (unit, end-to-end integration, AST sandbox security, prompt injection defense, PII scrubbing, and regression gating):
 
-```powershell
-# Windows:
-.\scripts\run_tests.ps1
-
-# Linux / macOS:
-./scripts/run_tests.sh
+```bash
+# Run the entire test suite across all modules:
+pytest tests/ -v
 ```
-*All 16 unit and end-to-end integration tests execute in **< 0.35s** with zero model weight downloads required.*
+*All 29 tests execute in **~5.9s** on CPU with **zero external model downloads required**.*
+
+#### 🚀 Run the Reproducible Neural Training & Promotion Pipeline
+Verify real neural backpropagation, loss reduction, SHA256 checkpointing, held-out evaluation, and atomic promotion in a single command:
+```bash
+python scripts/train_pipeline.py --version v002 --epochs 5
+```
 
 ---
 

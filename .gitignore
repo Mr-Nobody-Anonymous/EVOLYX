@@ -33,6 +33,8 @@ ENV/
 # Large Model Weights and Artifacts
 artifacts/models/
 artifacts/checkpoints/
+artifacts/adapters/
+artifacts/datasets/
 artifacts/*.db
 *.bin
 *.safetensors
@@ -42,6 +44,7 @@ artifacts/*.db
 # Upstream Repositories (git handles them independently or as submodules)
 upstream/*/
 !upstream/README.md
+!upstream/manifest.json
 
 # Logs and Environment
 *.log
