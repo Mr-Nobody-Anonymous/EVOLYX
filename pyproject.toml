@@ -64,8 +64,7 @@ evolyx = "apps.cli.main:main"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = "-p no:asyncio"
+asyncio_mode = "auto"
 
 [tool.hatch.build.targets.wheel]
 packages = ["evolyx", "apps", "integrations"]
