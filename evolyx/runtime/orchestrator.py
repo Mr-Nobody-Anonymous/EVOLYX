@@ -1,4 +1,4 @@
-"""Main agent runtime orchestrator for EVOLYX."""
+"""Main agent runtime orchestrator for EVOLYX with fail-closed assessment and tool failure propagation."""
 
 import logging
 import time
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 class EvolyxAgent:
-    """The central intelligent agent integrating reasoning, memory, tools, and learning."""
+    """The central intelligent agent integrating reasoning, memory, tools, and learning with fail-closed release gates."""
 
     def __init__(
         self,
@@ -53,7 +53,7 @@ class EvolyxAgent:
         return self.sessions[user_id]
 
     def run(self, user_id: str, message: str) -> TaskResult:
-        """Executes an end-to-end task cycle."""
+        """Executes an end-to-end task cycle with strict fail-closed safety and tool failure propagation."""
         start_time = time.perf_counter()
         session = self.get_or_create_session(user_id)
         session.add_message(role="user", content=message)
@@ -62,7 +62,7 @@ class EvolyxAgent:
         intent = self.intent_classifier.classify(message)
         logger.info("Classified user message as %s", intent.value)
 
-        # 2. Retrieve Relevant Memories
+        # 2. Retrieve Relevant Memories (excluding superseded and rejected records)
         memories: List[MemoryRecord] = []
         if self.memory:
             try:
@@ -79,19 +79,31 @@ class EvolyxAgent:
             available_tools=available_tools,
         )
 
-        # 4. Execute Plan Steps & Gather Evidence
+        # 4. Execute Plan Steps, Track Tool Errors & Gather Evidence
         gathered_evidence: List[Evidence] = []
         tool_calls: List[ToolExecutionResult] = []
+        tool_errors: List[str] = []
 
         for step in plan.steps:
             if step.tool_name:
                 logger.info("Executing plan step %d with tool %s", step.step_id, step.tool_name)
                 exec_result = self.tool_router.execute_step(step)
                 tool_calls.append(exec_result)
-                gathered_evidence.extend(exec_result.evidence)
+
+                if not exec_result.success:
+                    err = exec_result.error or "Unknown tool execution error"
+                    tool_errors.append(f"Tool {step.tool_name} failed: {err}")
+                    gathered_evidence.append(
+                        Evidence(
+                            source=step.tool_name,
+                            content=f"[TOOL_FAILURE] {err}",
+                            confidence=0.0,
+                        )
+                    )
+                else:
+                    gathered_evidence.extend(exec_result.evidence)
 
         # 5. Generate Model Draft Response
-        # Prepare context with system instructions, memories, and evidence
         context_msgs: List[Message] = []
         system_intro = (
             "You are EVOLYX, an advanced autonomous, self-improving AI platform.\n"
@@ -110,7 +122,9 @@ class EvolyxAgent:
 
         draft_answer = self.model.generate(context_msgs)
 
-        # 6. Objective Assessment & Self-Critique (Fail-Closed)
+        # 6. Objective Assessment & Self-Critique (Strict Fail-Closed Policy)
+        has_tool_failure = len(tool_errors) > 0
+
         if self.evaluator:
             try:
                 assessment = self.evaluator.evaluate_answer(
@@ -118,7 +132,16 @@ class EvolyxAgent:
                     answer=draft_answer,
                     evidence=gathered_evidence,
                 )
-                assessment.status = EvaluationStatus.VERIFIED if assessment.passed else EvaluationStatus.REJECTED
+                # If tools failed, the assessment cannot pass cleanly
+                if has_tool_failure:
+                    assessment.passed = False
+                    assessment.score = min(assessment.score, 0.40)
+                    assessment.feedback = f"Penalized for tool failures: {'; '.join(tool_errors)}"
+                    assessment.status = EvaluationStatus.REJECTED
+                else:
+                    assessment.status = (
+                        EvaluationStatus.VERIFIED if assessment.passed else EvaluationStatus.REJECTED
+                    )
             except Exception as exc:
                 logger.error("Evaluator assessment failed closed: %s", exc)
                 assessment = Assessment(
@@ -128,31 +151,36 @@ class EvolyxAgent:
                     status=EvaluationStatus.EVALUATION_ERROR,
                 )
         else:
+            # Policy: Never interpret missing verification as success
             assessment = Assessment(
-                passed=True,
-                score=0.5,
-                feedback="Draft generated without independent evaluator verification.",
+                passed=False,
+                score=0.0,
+                feedback="Unverified: draft generated without independent evaluation pass. Ineligible for training.",
                 status=EvaluationStatus.UNVERIFIED,
             )
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000
 
+        # Result success requires no tool failure and no evaluation error
+        is_task_successful = (not has_tool_failure) and (assessment.status not in (EvaluationStatus.EVALUATION_ERROR, EvaluationStatus.REJECTED))
+
         result = TaskResult(
             answer=draft_answer,
             intent=intent,
             evidence=gathered_evidence,
-            success=assessment.passed,
+            success=is_task_successful,
             latency_ms=elapsed_ms,
         )
 
         # 7. Record Trajectory in Learning / Experience Store
         session.add_message(role="assistant", content=draft_answer)
 
-        # Only approved, verified trajectories with score >= 0.85 can enter the training dataset
+        # Strict eligibility: requires VERIFIED status, passed assessment, score >= 0.85, and NO tool errors
         is_training_eligible = (
             assessment.passed
             and assessment.score >= 0.85
             and assessment.status == EvaluationStatus.VERIFIED
+            and not has_tool_failure
         )
 
         if self.experience_store:
@@ -171,7 +199,7 @@ class EvolyxAgent:
             except Exception as exc:
                 logger.warning("Failed to record trajectory in experience store: %s", exc)
 
-        # 8. Store Verified Procedures in Memory (strictly requires VERIFIED status)
+        # 8. Store Verified Procedures in Memory (strictly requires VERIFIED training-eligible status)
         if self.memory and is_training_eligible and gathered_evidence:
             try:
                 new_mem = MemoryRecord(

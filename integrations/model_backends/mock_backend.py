@@ -29,6 +29,12 @@ class MockModelBackend(ModelBackend):
             )
         if "find and fix" in last_msg.lower() or "bug" in last_msg.lower():
             return "The issue was caused by an unhandled edge case. Verified test case passes."
+
+        for m in messages:
+            if m.role == "system" and "Gathered Tool Evidence:" in m.content:
+                ev_part = m.content.split("Gathered Tool Evidence:")[-1].strip()
+                return f"{self.default_response}: Processed query '{last_msg[:60]}'. Result: {ev_part}"
+
         return f"{self.default_response}: Processed query '{last_msg[:60]}'."
 
     def health_check(self) -> bool:

@@ -35,6 +35,8 @@ artifacts/models/
 artifacts/checkpoints/
 artifacts/adapters/
 artifacts/datasets/
+artifacts/jobs/
+artifacts/learning/
 artifacts/*.db
 *.bin
 *.safetensors
