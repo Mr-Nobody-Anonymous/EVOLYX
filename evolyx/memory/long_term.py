@@ -89,7 +89,7 @@ class LongTermMemory(MemoryBackend):
                 SELECT * FROM memories 
                 WHERE (user_id = ? OR user_id = 'global' OR user_id = 'default_user')
                   AND confidence >= ?
-                  AND status != 'rejected'
+                  AND status NOT IN ('rejected', 'superseded')
                 ORDER BY confidence DESC, created_at DESC
                 LIMIT 50
                 """,
@@ -121,12 +121,77 @@ class LongTermMemory(MemoryBackend):
         return records[:limit]
 
     def verify_memory(self, memory_id: str, approved: bool) -> bool:
-        status = VerificationStatus.APPROVED if approved else VerificationStatus.REJECTED
+        """Legacy helper method for boolean approval."""
+        status = VerificationStatus.APPROVED_FOR_TRAINING if approved else VerificationStatus.REJECTED
+        return self.transition_status(memory_id, status, reason="Manual/automated verification")
+
+    def transition_status(
+        self,
+        memory_id: str,
+        new_status: VerificationStatus,
+        reason: str = "",
+        evidence: Optional[Dict[str, Any]] = None,
+    ) -> bool:
+        """Transitions memory through verified lifecycle states with audit trail."""
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
+            cursor.execute("SELECT metadata_json FROM memories WHERE id = ?", (memory_id,))
+            row = cursor.fetchone()
+            if not row:
+                return False
+
+            meta = json.loads(row[0] or "{}")
+            history = meta.setdefault("transition_history", [])
+            history.append({
+                "to_status": new_status.value,
+                "reason": reason,
+                "evidence": evidence or {},
+            })
+
             cursor.execute(
-                "UPDATE memories SET status = ? WHERE id = ?",
-                (status.value, memory_id),
+                "UPDATE memories SET status = ?, metadata_json = ? WHERE id = ?",
+                (new_status.value, json.dumps(meta), memory_id),
             )
             conn.commit()
             return cursor.rowcount > 0
+
+    def mark_superseded(self, old_memory_id: str, new_memory_id: str, reason: str = "") -> bool:
+        """Reconciles contradictory or obsolete knowledge by marking old memory superseded."""
+        return self.transition_status(
+            old_memory_id,
+            VerificationStatus.SUPERSEDED,
+            reason=f"Superseded by memory {new_memory_id}: {reason}",
+            evidence={"superseded_by": new_memory_id},
+        )
+
+    def get_training_approved_memories(self, limit: int = 100) -> List[MemoryRecord]:
+        """Returns exclusively verified, training-approved memories with full provenance."""
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT * FROM memories 
+                WHERE status IN ('approved_for_training', 'approved')
+                ORDER BY confidence DESC
+                LIMIT ?
+                """,
+                (limit,),
+            )
+            rows = cursor.fetchall()
+
+        return [
+            MemoryRecord(
+                id=r["id"],
+                user_id=r["user_id"],
+                content=r["content"],
+                kind=MemoryKind(r["kind"]),
+                source=r["source"],
+                confidence=r["confidence"],
+                status=VerificationStatus(r["status"]),
+                created_at=r["created_at"],
+                last_verified_at=r["last_verified_at"],
+                metadata=json.loads(r["metadata_json"] or "{}"),
+            )
+            for r in rows
+        ]

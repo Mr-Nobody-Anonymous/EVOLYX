@@ -6,6 +6,7 @@ from typing import Any, List, Optional
 from evolyx.core.interfaces import EvaluatorBackend, MemoryBackend, ModelBackend
 from evolyx.core.schemas import (
     Assessment,
+    EvaluationStatus,
     Evidence,
     IntentType,
     MemoryKind,
@@ -109,8 +110,7 @@ class EvolyxAgent:
 
         draft_answer = self.model.generate(context_msgs)
 
-        # 6. Objective Assessment & Self-Critique
-        assessment = Assessment(passed=True, score=1.0, feedback="Accepted")
+        # 6. Objective Assessment & Self-Critique (Fail-Closed)
         if self.evaluator:
             try:
                 assessment = self.evaluator.evaluate_answer(
@@ -118,8 +118,22 @@ class EvolyxAgent:
                     answer=draft_answer,
                     evidence=gathered_evidence,
                 )
+                assessment.status = EvaluationStatus.VERIFIED if assessment.passed else EvaluationStatus.REJECTED
             except Exception as exc:
-                logger.warning("Evaluator assessment failed: %s", exc)
+                logger.error("Evaluator assessment failed closed: %s", exc)
+                assessment = Assessment(
+                    passed=False,
+                    score=0.0,
+                    feedback=f"Evaluation Error: {exc}",
+                    status=EvaluationStatus.EVALUATION_ERROR,
+                )
+        else:
+            assessment = Assessment(
+                passed=True,
+                score=0.5,
+                feedback="Draft generated without independent evaluator verification.",
+                status=EvaluationStatus.UNVERIFIED,
+            )
 
         elapsed_ms = (time.perf_counter() - start_time) * 1000
 
@@ -134,6 +148,13 @@ class EvolyxAgent:
         # 7. Record Trajectory in Learning / Experience Store
         session.add_message(role="assistant", content=draft_answer)
 
+        # Only approved, verified trajectories with score >= 0.85 can enter the training dataset
+        is_training_eligible = (
+            assessment.passed
+            and assessment.score >= 0.85
+            and assessment.status == EvaluationStatus.VERIFIED
+        )
+
         if self.experience_store:
             try:
                 trajectory = Trajectory(
@@ -144,21 +165,21 @@ class EvolyxAgent:
                     tool_calls=tool_calls,
                     result=result,
                     assessment=assessment,
-                    eligible_for_training=assessment.passed and assessment.score >= 0.85,
+                    eligible_for_training=is_training_eligible,
                 )
                 self.experience_store.record(trajectory)
             except Exception as exc:
                 logger.warning("Failed to record trajectory in experience store: %s", exc)
 
-        # 8. Store Verified Procedures in Memory
-        if self.memory and assessment.passed and gathered_evidence:
+        # 8. Store Verified Procedures in Memory (strictly requires VERIFIED status)
+        if self.memory and is_training_eligible and gathered_evidence:
             try:
                 new_mem = MemoryRecord(
                     content=f"Verified resolution for '{message[:80]}...': {draft_answer[:200]}...",
                     kind=MemoryKind.VERIFIED_PROCEDURE,
                     source=f"task_{intent.value}",
                     confidence=assessment.score,
-                    status=VerificationStatus.APPROVED,
+                    status=VerificationStatus.APPROVED_FOR_TRAINING,
                     user_id=user_id,
                 )
                 self.memory.remember(new_mem)

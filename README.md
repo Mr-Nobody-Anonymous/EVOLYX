@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-29%20Passed%20(100%25)-success?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/tests-46%20Passed%20(100%25)-success?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 [![CI](https://img.shields.io/badge/CI-Automated%20Matrix-blue?style=for-the-badge&logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
 [![Upstream](https://img.shields.io/badge/upstream%20manifest-18%20Pinned%20Repos-8A2BE2?style=for-the-badge)](upstream/manifest.json)
 [![Integrations](https://img.shields.io/badge/status%20matrix-18%20Adapters-00C49F?style=for-the-badge)](docs/INTEGRATIONS.md)
@@ -184,7 +184,7 @@ EVOLYX/
 ├── apps/                        # Entry points: CLI, FastAPI server, Dashboard
 ├── integrations/                # Adapters connecting upstream frameworks to EVOLYX
 ├── artifacts/                   # Immutable storage for checkpoints, datasets, and reports
-├── tests/                       # Unit, integration, and safety test suite (16 tests)
+├── tests/                       # Unit, integration, and adversarial safety suite
 ├── scripts/                     # PowerShell & Bash automation scripts
 ├── pyproject.toml               # Python project configuration
 ├── docker-compose.yml           # Containerized orchestration
@@ -260,18 +260,22 @@ python install.py --profile auto
 ---
 
 ### 🧪 Immediate Verification & Comprehensive Self-Test
-Run the built-in 29-test battery (unit, end-to-end integration, AST sandbox security, prompt injection defense, PII scrubbing, and regression gating):
+Run the built-in 46-test battery (unit, end-to-end integration, AST sandbox security, prompt injection defense, PII scrubbing, LoRA adapter backpropagation, and regression gating):
 
 ```bash
 # Run the entire test suite across all modules:
 pytest tests/ -v
 ```
-*All 29 tests execute in **~5.9s** on CPU with **zero external model downloads required**.*
+*All 46 tests execute in **~6.7s** on CPU with **zero external model downloads required**.*
 
 #### 🚀 Run the Reproducible Neural Training & Promotion Pipeline
 Verify real neural backpropagation, loss reduction, SHA256 checkpointing, held-out evaluation, and atomic promotion in a single command:
 ```bash
-python scripts/train_pipeline.py --version v002 --epochs 5
+# Fast in-memory Micro Transformer training:
+python scripts/train_pipeline.py --backend micro --version v002 --epochs 5
+
+# Parameter-efficient LoRA adapter training engine:
+python scripts/train_pipeline.py --backend adapter --version v003 --epochs 5
 ```
 
 ---

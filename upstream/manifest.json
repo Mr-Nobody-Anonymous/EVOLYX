@@ -1,9 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "schema_version": "1.0.0",
-  "generated_at": "2026-10-18T10:40:00Z",
+  "schema_version": "1.1.0",
+  "generated_at": "2026-10-18T11:40:00Z",
   "total_repositories": 18,
   "description": "Cryptographically pinned inventory of upstream open-source frameworks, commit hashes, licenses, and EVOLYX adapter boundaries.",
+  "status_taxonomy": {
+    "planned": "No adapter implemented yet",
+    "reference": "Source inspected for research and architecture design; not directly invoked in runtime",
+    "adapter_ready": "Typed adapter interface exists and passes contract tests, pending live hardware integration test",
+    "implemented": "Adapter calls and integrates upstream module or native protocol in EVOLYX runtime",
+    "integration_tested": "Automated regression test exercises the actual implementation in CI test suite",
+    "production_validated": "Validated on supported production hardware with operational health and recovery checks"
+  },
   "repositories": {
     "trl": {
       "name": "TRL (Transformer Reinforcement Learning)",
@@ -12,7 +20,7 @@
       "remote_url": "https://github.com/huggingface/trl.git",
       "pinned_commit": "6d6901c5e3963108076131ac4979d344566b13a2",
       "license": "Apache-2.0",
-      "adapter_module": "evolyx.interfaces.backend_registry",
+      "adapter_module": "evolyx.training.foundation_trainer",
       "integration_status": "adapter_ready",
       "extra_group": "training"
     },
@@ -23,7 +31,7 @@
       "remote_url": "https://github.com/unslothai/unsloth.git",
       "pinned_commit": "b4a4855e49c674f1dd375a5f716d901502b97b73",
       "license": "Apache-2.0",
-      "adapter_module": "evolyx.interfaces.backend_registry",
+      "adapter_module": "evolyx.training.foundation_trainer",
       "integration_status": "adapter_ready",
       "extra_group": "training"
     },
@@ -34,7 +42,7 @@
       "remote_url": "https://github.com/OpenRLHF/OpenRLHF.git",
       "pinned_commit": "dc2a7ad326f619fc5a47737ea47d1920ce2c0b53",
       "license": "Apache-2.0",
-      "adapter_module": "evolyx.interfaces.backend_registry",
+      "adapter_module": "evolyx.training.reinforcement",
       "integration_status": "adapter_ready",
       "extra_group": "training"
     },
@@ -45,7 +53,7 @@
       "remote_url": "https://github.com/axolotl-ai-cloud/axolotl.git",
       "pinned_commit": "edfa93277dfb8f30973b7c003174a1b0a9fdfe1b",
       "license": "Apache-2.0",
-      "adapter_module": "evolyx.interfaces.backend_registry",
+      "adapter_module": "evolyx.training.sft",
       "integration_status": "adapter_ready",
       "extra_group": "training"
     },
@@ -56,8 +64,8 @@
       "remote_url": "https://github.com/huggingface/peft.git",
       "pinned_commit": "c2d5f697fbb30063cbde6f39e2734883b70b8753",
       "license": "Apache-2.0",
-      "adapter_module": "evolyx.interfaces.backend_registry",
-      "integration_status": "installed",
+      "adapter_module": "evolyx.training.foundation_trainer",
+      "integration_status": "integration_tested",
       "extra_group": "training"
     },
     "transformers": {
@@ -68,7 +76,7 @@
       "pinned_commit": "d4804f9d76b8c071b993d813e9e87067b780cbee",
       "license": "Apache-2.0",
       "adapter_module": "evolyx.core.interfaces",
-      "integration_status": "installed",
+      "integration_status": "integration_tested",
       "extra_group": "core"
     },
     "vllm": {

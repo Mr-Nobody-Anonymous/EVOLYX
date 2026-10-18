@@ -21,10 +21,23 @@ class MemoryKind(str, Enum):
     SYSTEM_LESSON = "system_lesson"
 
 
+class EvaluationStatus(str, Enum):
+    VERIFIED = "verified"
+    UNVERIFIED = "unverified"
+    EVALUATION_ERROR = "evaluation_error"
+    REJECTED = "rejected"
+
+
 class VerificationStatus(str, Enum):
+    OBSERVED = "observed"
+    CANDIDATE = "candidate"
+    VERIFIED = "verified"
+    APPROVED_FOR_TRAINING = "approved_for_training"
+    REJECTED = "rejected"
+    SUPERSEDED = "superseded"
+    # Legacy aliases
     PENDING = "pending"
     APPROVED = "approved"
-    REJECTED = "rejected"
     CONTRADICTED = "contradicted"
 
 
@@ -80,6 +93,7 @@ class Assessment:
     passed: bool
     score: float
     feedback: str
+    status: EvaluationStatus = EvaluationStatus.UNVERIFIED
     factuality_score: float = 1.0
     regression_risk: float = 0.0
 

@@ -24,3 +24,19 @@ def test_web_search_tool():
     res = tool.execute(query="continuous reinforcement learning")
     assert res.success is True
     assert len(res.evidence) > 0
+
+
+def test_python_executor_subprocess_timeout_and_runtime_error():
+    tool = PythonExecutorTool()
+
+    # 1. Timeout enforcement in disposable subprocess
+    timeout_code = "import time\ntime.sleep(2)"
+    res_timeout = tool.execute(code=timeout_code, timeout=0.2)
+    assert res_timeout.success is False
+    assert "Execution Timeout" in str(res_timeout.error)
+
+    # 2. Runtime exception caught cleanly from subprocess stderr
+    div_zero_code = "x = 1 / 0"
+    res_err = tool.execute(code=div_zero_code)
+    assert res_err.success is False
+    assert "ZeroDivisionError" in str(res_err.error)
