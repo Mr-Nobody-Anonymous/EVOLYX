@@ -192,53 +192,118 @@ EVOLYX/
 
 ---
 
-## 🚀 Quickstart & Installation
+## 🚀 Quickstart: Universal Installation on Any Device
 
-### 1. Prerequisites
-- Python 3.10, 3.11, or 3.12 (64-bit)
-- Git 2.40+
-- *(Optional for GPU acceleration)*: NVIDIA CUDA 12.1+ / ROCm
+EVOLYX includes an intelligent hardware detector and automated cross-platform installers that automatically configure the environment for your specific device (CPU laptop, NVIDIA GPU server, Apple Silicon Mac, or Docker container).
 
-### 2. Verification
-Verify your environment and run the test battery:
+### ⚡ 1-Command Installation
+
+<table>
+<tr>
+<th>Platform</th>
+<th>Command</th>
+<th>Hardware Target</th>
+</tr>
+<tr>
+<td><b>Windows (PowerShell)</b></td>
+<td>
 
 ```powershell
-# On Windows (PowerShell):
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+</td>
+<td>Auto-detects CPU / NVIDIA CUDA GPU</td>
+</tr>
+<tr>
+<td><b>Linux / Cloud Server</b></td>
+<td>
+
+```bash
+chmod +x install.sh && ./install.sh
+```
+</td>
+<td>Auto-detects CPU / NVIDIA CUDA / AMD ROCm</td>
+</tr>
+<tr>
+<td><b>macOS (Apple Silicon & Intel)</b></td>
+<td>
+
+```bash
+chmod +x install.sh && ./install.sh
+```
+</td>
+<td>Auto-detects Apple Silicon M1/M2/M3/M4 Metal (MPS)</td>
+</tr>
+<tr>
+<td><b>Docker / Headless Server</b></td>
+<td>
+
+```bash
+docker compose up -d
+```
+</td>
+<td>Zero host dependencies; instant containerized API + Dashboard</td>
+</tr>
+<tr>
+<td><b>Python Direct (Any Device)</b></td>
+<td>
+
+```bash
+python install.py --profile auto
+```
+</td>
+<td>Custom profiles: <code>auto</code>, <code>cpu</code>, <code>gpu</code>, <code>mac</code>, <code>dev</code></td>
+</tr>
+</table>
+
+---
+
+### 🧪 Immediate Verification & Self-Test
+Run the built-in 16-test battery to verify complete platform readiness:
+
+```powershell
+# Windows:
 .\scripts\run_tests.ps1
 
-# On Linux / macOS (Bash):
+# Linux / macOS:
 ./scripts/run_tests.sh
 ```
+*All 16 unit and end-to-end integration tests execute in **< 0.35s** with zero model weight downloads required.*
 
-All 16 unit and end-to-end integration tests execute in **< 0.3 seconds** with zero external dependencies required for testing.
+---
 
-### 3. Interactive CLI
+### 🎮 Operating EVOLYX
+
+#### 1. Interactive Research Terminal
 Launch the conversational agent:
-
 ```powershell
 .\scripts\run_cli.ps1 chat
 ```
 
-Execute a single autonomous task:
-
+#### 2. Execute an Autonomous Single Task
+Decompose, plan, query tools, and verify output:
 ```powershell
-.\scripts\run_cli.ps1 task "Find and fix bug in binary search algorithm"
+.\scripts\run_cli.ps1 task "Search for the latest methods in preference optimization"
 ```
 
-### 4. Trigger an Autonomous Evolution Cycle
-Simulate failure diagnosis, proposal generation, A/B experimentation, and regression gating:
-
+#### 3. Trigger an Autonomous Evolution Cycle
+Diagnose failures, propose hypotheses, run A/B experiments, and test regression release gates:
 ```powershell
 .\scripts\run_experiment.ps1
 ```
 
-### 5. Launch the REST API
-Start the FastAPI server:
-
+#### 4. Launch the REST API
+Start the production-ready FastAPI server:
 ```powershell
 .\scripts\run_api.ps1
 ```
 Interactive OpenAPI documentation will be accessible at `http://127.0.0.1:8000/docs`.
+
+#### 5. Open the Experiment Dashboard
+Inspect candidate checkpoints, datasets, and platform health:
+```powershell
+python -m apps.dashboard.app
+```
 
 ---
 
