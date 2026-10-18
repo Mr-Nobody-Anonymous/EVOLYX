@@ -1,0 +1,22 @@
+# Memory & Knowledge Store Configuration
+short_term:
+  sliding_window_turns: 10
+  context_buffer_tokens: 4096
+
+long_term:
+  backend: "sqlite" # "sqlite", "letta", "mem0"
+  sqlite_db_path: "artifacts/evolyx.db"
+  similarity_threshold: 0.75
+  max_retrieved_memories: 5
+
+quality_filter:
+  min_confidence: 0.80
+  require_verification: true
+  scrub_pii: true
+  auto_decay_unverified_days: 30
+
+categories:
+  - "verified_procedure"
+  - "user_preference"
+  - "domain_fact"
+  - "system_lesson"

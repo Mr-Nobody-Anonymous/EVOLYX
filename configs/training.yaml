@@ -1,0 +1,38 @@
+# Training and Fine-Tuning Pipeline Configuration
+backend: "unsloth" # "unsloth", "trl", "peft", "axolotl", "mock"
+
+lora:
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  bias: "none"
+
+hyperparameters:
+  learning_rate: 2.0e-4
+  num_train_epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  warmup_ratio: 0.05
+  lr_scheduler_type: "cosine"
+  weight_decay: 0.01
+  max_seq_length: 2048
+
+dataset:
+  raw_dir: "artifacts/datasets/raw"
+  filtered_dir: "artifacts/datasets/filtered"
+  approved_dir: "artifacts/datasets/approved"
+  min_examples_to_trigger: 50
+  validation_split: 0.15
+
+output:
+  candidates_dir: "artifacts/models/candidates"
+  checkpoints_dir: "artifacts/checkpoints"
+  save_total_limit: 3

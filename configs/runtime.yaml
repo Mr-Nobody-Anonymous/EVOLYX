@@ -1,0 +1,26 @@
+# Runtime Orchestration Configuration
+orchestrator:
+  max_planning_steps: 10
+  step_timeout_sec: 30
+  task_timeout_sec: 180
+  enable_self_reflection: true
+  enable_verification_gate: true
+
+intent:
+  categories:
+    - "direct_answer"
+    - "research_and_retrieve"
+    - "code_and_tool"
+    - "multi_step_workflow"
+    - "system_evolution"
+  confidence_threshold: 0.65
+
+planner:
+  strategy: "hierarchical" # "hierarchical", "react", "linear"
+  allow_parallel_steps: false
+  max_subtasks: 6
+
+session:
+  max_history_turns: 20
+  token_budget: 6000
+  compression_strategy: "summarize_oldest"

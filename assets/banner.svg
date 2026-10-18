@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 420" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bannerBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080c16"/>
+      <stop offset="50%" stop-color="#0d1424"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </linearGradient>
+
+    <!-- Neon Text Gradients -->
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F2FE"/>
+      <stop offset="40%" stop-color="#4FACFE"/>
+      <stop offset="70%" stop-color="#9B51E0"/>
+      <stop offset="100%" stop-color="#F355DA"/>
+    </linearGradient>
+
+    <linearGradient id="subGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="100%" stop-color="#94A3B8"/>
+    </linearGradient>
+
+    <linearGradient id="accentGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F2FE"/>
+      <stop offset="100%" stop-color="#9B51E0"/>
+    </linearGradient>
+
+    <linearGradient id="badgeBorder" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F2FE" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#9B51E0" stop-opacity="0.8"/>
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="bannerGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="intenseLight" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Deep Canvas -->
+  <rect width="1280" height="420" rx="24" fill="url(#bannerBg)"/>
+
+  <!-- Ambient Glow Blobs -->
+  <circle cx="240" cy="210" r="180" fill="#00F2FE" opacity="0.08" filter="url(#bannerGlow)"/>
+  <circle cx="980" cy="180" r="220" fill="#9B51E0" opacity="0.07" filter="url(#bannerGlow)"/>
+  <circle cx="640" cy="380" r="160" fill="#FF5E62" opacity="0.05" filter="url(#bannerGlow)"/>
+
+  <!-- Tech Grid Background -->
+  <g opacity="0.07" stroke="#4FACFE" stroke-width="1" fill="none">
+    <line x1="0" y1="70" x2="1280" y2="70"/>
+    <line x1="0" y1="140" x2="1280" y2="140"/>
+    <line x1="0" y1="210" x2="1280" y2="210"/>
+    <line x1="0" y1="280" x2="1280" y2="280"/>
+    <line x1="0" y1="350" x2="1280" y2="350"/>
+    <line x1="160" y1="0" x2="160" y2="420"/>
+    <line x1="320" y1="0" x2="320" y2="420"/>
+    <line x1="480" y1="0" x2="480" y2="420"/>
+    <line x1="640" y1="0" x2="640" y2="420"/>
+    <line x1="800" y1="0" x2="800" y2="420"/>
+    <line x1="960" y1="0" x2="960" y2="420"/>
+    <line x1="1120" y1="0" x2="1120" y2="420"/>
+  </g>
+
+  <!-- Embedded Logo Emblem on Left -->
+  <g transform="translate(140, 210) scale(0.38)">
+    <circle cx="0" cy="0" r="320" fill="none" stroke="url(#accentGlow)" stroke-width="3" stroke-dasharray="14 20" opacity="0.5"/>
+    <circle cx="0" cy="0" r="280" fill="none" stroke="#00F2FE" stroke-width="2" stroke-dasharray="40 30" opacity="0.7"/>
+    
+    <!-- Outer Spirals -->
+    <path d="M 0,-200 C 160,-260 280,-120 220,40 C 160,180 0,200 0,200 C 0,200 -160,180 -220,40 C -280,-120 -160,-260 0,-200 Z"
+          fill="none" stroke="url(#textGrad)" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"
+          filter="url(#bannerGlow)"/>
+
+    <path d="M -120,-120 C -50,-220 50,-220 120,-120 C 200,0 80,140 0,160 C -80,140 -200,0 -120,-120 Z"
+          fill="none" stroke="#00F2FE" stroke-width="14" stroke-linecap="round"
+          filter="url(#intenseLight)"/>
+
+    <!-- Central Singularity -->
+    <polygon points="0,-100 80,0 0,100 -80,0" fill="#9B51E0" opacity="0.4"/>
+    <polygon points="0,-75 60,0 0,75 -60,0" fill="none" stroke="#00F2FE" stroke-width="5"/>
+    <circle cx="0" cy="0" r="25" fill="#FFFFFF" filter="url(#intenseLight)"/>
+    <circle cx="0" cy="0" r="14" fill="#00F2FE"/>
+  </g>
+
+  <!-- Title & Typography on Right -->
+  <g transform="translate(360, 0)">
+    <!-- Top Pill Badge -->
+    <g transform="translate(0, 75)">
+      <rect width="310" height="32" rx="16" fill="#131C31" stroke="url(#badgeBorder)" stroke-width="1.5"/>
+      <circle cx="18" cy="16" r="5" fill="#00F2FE" filter="url(#intenseLight)"/>
+      <text x="32" y="21" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#38BDF8" letter-spacing="1.5">
+        RECURSIVE AI ARCHITECTURE
+      </text>
+    </g>
+
+    <!-- Main Title -->
+    <text x="0" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Arial Black', sans-serif" font-size="76" font-weight="900" fill="url(#textGrad)" letter-spacing="6" filter="url(#bannerGlow)">
+      EVOLYX
+    </text>
+
+    <!-- Subtitle -->
+    <text x="4" y="226" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="url(#subGrad)" letter-spacing="0.5">
+      The Autonomous Self-Improving AI Research Platform
+    </text>
+
+    <!-- Feature Description -->
+    <text x="4" y="265" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#64748B" letter-spacing="0.2">
+      Self-Evaluating Pipelines · Verified Runtime Memory · Gated Fine-Tuning · Bounded Architecture Evolution
+    </text>
+
+    <!-- Interactive Badges Row -->
+    <g transform="translate(4, 305)">
+      <!-- Badge 1 -->
+      <g>
+        <rect width="135" height="34" rx="8" fill="#111827" stroke="#1E293B" stroke-width="1.2"/>
+        <text x="16" y="21" font-family="monospace" font-size="12" font-weight="600" fill="#00F2FE">● v0.1.0 Ready</text>
+      </g>
+      <!-- Badge 2 -->
+      <g transform="translate(145, 0)">
+        <rect width="175" height="34" rx="8" fill="#111827" stroke="#1E293B" stroke-width="1.2"/>
+        <text x="16" y="21" font-family="monospace" font-size="12" font-weight="600" fill="#A855F7">◆ 18 Unified Stacks</text>
+      </g>
+      <!-- Badge 3 -->
+      <g transform="translate(330, 0)">
+        <rect width="170" height="34" rx="8" fill="#111827" stroke="#1E293B" stroke-width="1.2"/>
+        <text x="16" y="21" font-family="monospace" font-size="12" font-weight="600" fill="#10B981">✔ 100% Tests Pass</text>
+      </g>
+      <!-- Badge 4 -->
+      <g transform="translate(510, 0)">
+        <rect width="185" height="34" rx="8" fill="#111827" stroke="#1E293B" stroke-width="1.2"/>
+        <text x="16" y="21" font-family="monospace" font-size="12" font-weight="600" fill="#F59E0B">★ Anti-Degradation</text>
+      </g>
+    </g>
+  </g>
+</svg>

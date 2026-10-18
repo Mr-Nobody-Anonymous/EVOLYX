@@ -1,0 +1,25 @@
+# Evaluation and Promotion Configuration
+benchmarks:
+  suites:
+    - name: "instruction_following"
+      weight: 0.25
+      pass_threshold: 0.85
+    - name: "code_synthesis_unit_tests"
+      weight: 0.35
+      pass_threshold: 0.90
+    - name: "tool_selection_accuracy"
+      weight: 0.20
+      pass_threshold: 0.92
+    - name: "factuality_and_citations"
+      weight: 0.20
+      pass_threshold: 0.88
+
+regression:
+  max_allowed_drop_pct: 2.0 # Cannot drop more than 2% on any existing baseline metric
+  reference_baseline: "artifacts/evaluations/baseline_v001.json"
+
+promotion:
+  min_overall_score: 0.88
+  require_strictly_better_than_production: true
+  allow_auto_promotion: false
+  human_signoff_required: true

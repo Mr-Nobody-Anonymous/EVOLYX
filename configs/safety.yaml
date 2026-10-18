@@ -1,0 +1,25 @@
+# Safety, Sandboxing and Control Plane Configuration
+sandbox:
+  python_timeout_seconds: 15
+  memory_limit_mb: 512
+  forbidden_modules:
+    - "os.system"
+    - "subprocess.Popen"
+    - "shutil.rmtree"
+    - "ctypes"
+  whitelisted_paths:
+    - "artifacts/"
+    - "experiments/"
+    - "tests/"
+
+permissions:
+  allow_file_writes: true
+  allow_network_requests: true
+  allow_self_code_modification: false # Only through evolution proposals with review
+  require_approval_for_destructive_ops: true
+
+privacy:
+  scrub_api_keys: true
+  scrub_email_addresses: true
+  scrub_ip_addresses: true
+  data_consent_required_for_training: true

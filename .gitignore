@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.venv
+env/
+venv/
+ENV/
+
+# Large Model Weights and Artifacts
+artifacts/models/
+artifacts/checkpoints/
+artifacts/*.db
+*.bin
+*.safetensors
+*.gguf
+*.pt
+
+# Upstream Repositories (git handles them independently or as submodules)
+upstream/*/
+!upstream/README.md
+
+# Logs and Environment
+*.log
+.env
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
